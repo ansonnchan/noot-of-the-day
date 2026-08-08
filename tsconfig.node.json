@@ -9,6 +9,5 @@
     "noEmit": true,
     "types": ["node"]
   },
-  "include": ["vite.config.ts", "vitest.config.ts", "api"]
+  "include": ["vite.config.ts", "vitest.config.ts", "api", "server"]
 }
-
