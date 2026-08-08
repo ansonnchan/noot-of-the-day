@@ -30,22 +30,15 @@ export function NootReveal({ state, onReveal }: NootRevealProps) {
   return (
     <section className="landing" aria-labelledby="landing-title">
       <p className="landing__eyebrow">
-        {state === "arrived" ? "a new noot has arrived." : "noot of the day"}
+        {state === "arrived" ? "a new noot has arrived." : "today’s noot"}
       </p>
       <h1 id="landing-title">
         one penguin. <span>one little fact.</span> once a day.
       </h1>
-      <div className="landing__mascot-scene">
-        <div className="landing__ice-wash" aria-hidden="true" />
-        <PenguinMascot state="default" />
-        <span className="landing__noot-note" aria-hidden="true">
-          noot!
-        </span>
-      </div>
+      <PenguinMascot state="default" />
       <button className="reveal-button" type="button" onClick={onReveal}>
         meet today’s noot <span aria-hidden="true">→</span>
       </button>
-      <p className="landing__personality">a tiny penguin is waiting for you.</p>
     </section>
   );
 }

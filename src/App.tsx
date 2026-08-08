@@ -1,5 +1,6 @@
-import { useCallback, useRef, useState, type MouseEvent } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { DailyNoot } from "./components/DailyNoot";
+import { Countdown } from "./components/Countdown";
 import { NootReveal } from "./components/NootReveal";
 import { getLocalDateKey } from "./lib/daily/date";
 import {
@@ -10,7 +11,13 @@ import {
 import { getDailyNoot } from "./lib/penguins/boatman";
 import type { DailyNoot as DailyNootType } from "./lib/penguins/types";
 
-type RevealState = "landing" | "arrived" | "loading" | "revealed" | "error";
+type View =
+  | "landing"
+  | "arrived"
+  | "loading"
+  | "noot"
+  | "waiting"
+  | "error";
 
 function getLocalStorage(): StorageLike | null {
   try {
@@ -30,19 +37,19 @@ export function App() {
   const requestId = useRef(0);
   const [dateKey, setDateKey] = useState(initialDateKey);
   const [noot, setNoot] = useState<DailyNootType | null>(initialNoot);
-  const [revealState, setRevealState] = useState<RevealState>(
-    initialNoot ? "revealed" : "landing",
+  const [view, setView] = useState<View>(
+    initialNoot ? "noot" : "landing",
   );
   const [aboutOpen, setAboutOpen] = useState(false);
 
   const revealNoot = useCallback(async () => {
     if (noot && dateKey === getLocalDateKey()) {
-      setRevealState("revealed");
+      setView("noot");
       return;
     }
 
     const activeRequest = ++requestId.current;
-    setRevealState("loading");
+    setView("loading");
 
     try {
       const dailyNoot = await getDailyNoot(dateKey);
@@ -50,18 +57,17 @@ export function App() {
       if (storage) writeStoredNoot(storage, dateKey, dailyNoot);
       if (activeRequest !== requestId.current) return;
       setNoot(dailyNoot);
-      setRevealState("revealed");
+      setView("noot");
     } catch {
       if (activeRequest !== requestId.current) return;
-      setRevealState("error");
+      setView("error");
     }
   }, [dateKey, noot]);
 
-  const handleHome = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
+  const handleBack = useCallback(() => {
     requestId.current += 1;
     setAboutOpen(false);
-    setRevealState("landing");
+    setView((current) => (current === "waiting" ? "noot" : "landing"));
   }, []);
 
   const handleNewNootAvailable = useCallback(() => {
@@ -71,20 +77,35 @@ export function App() {
     if (storage) readStoredNoot(storage, nextDateKey);
     setDateKey(nextDateKey);
     setNoot(null);
-    setRevealState("arrived");
+    setView("arrived");
   }, []);
 
+  useEffect(() => {
+    const checkDate = () => {
+      if (getLocalDateKey() !== dateKey) handleNewNootAvailable();
+    };
+
+    const interval = window.setInterval(checkDate, 1000);
+    return () => window.clearInterval(interval);
+  }, [dateKey, handleNewNootAvailable]);
+
+  const hasBackButton = view === "noot" || view === "waiting";
+
   return (
-    <div className={`site-shell site-shell--${revealState}`}>
+    <div className={`site-shell site-shell--${view}`}>
       <header className="site-header">
-        <a
-          className="wordmark"
-          href="/"
-          aria-label="Noot of the Day home"
-          onClick={handleHome}
-        >
-          noot<span>.</span>
-        </a>
+        {hasBackButton ? (
+          <button
+            className="back-button"
+            type="button"
+            aria-label={view === "waiting" ? "Back to today's Noot" : "Home"}
+            onClick={handleBack}
+          >
+            <span aria-hidden="true">←</span>
+          </button>
+        ) : (
+          <span />
+        )}
         <button
           className="about-button"
           type="button"
@@ -99,37 +120,52 @@ export function App() {
       {aboutOpen ? (
         <aside className="about-note" id="about-note">
           <p>
-            A tiny daily ritual: one real penguin, one sourced fact, then a quiet
-            wait until tomorrow.
+            Noot of the Day serves one penguin fact each day. Facts provided by
+            the Boatman Penguin API.
           </p>
+          <div className="about-note__links">
+            <a
+              href="https://github.com/boatman-27/SaaS_Penguin_API"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Boatman Penguin API <span aria-hidden="true">↗</span>
+            </a>
+            {noot?.sourceUrl ? (
+              <a href={noot.sourceUrl} target="_blank" rel="noreferrer">
+                today’s fact source <span aria-hidden="true">↗</span>
+              </a>
+            ) : null}
+            {noot?.image?.creditUrl ? (
+              <a href={noot.image.creditUrl} target="_blank" rel="noreferrer">
+                photo: {noot.image.credit}
+                {noot.image.license ? ` · ${noot.image.license}` : ""}{" "}
+                <span aria-hidden="true">↗</span>
+              </a>
+            ) : null}
+          </div>
         </aside>
       ) : null}
 
       <main className="site-main">
-        {revealState === "revealed" && noot ? (
+        {view === "noot" && noot ? (
           <DailyNoot
             dateKey={dateKey}
             noot={noot}
+            onWantAnother={() => setView("waiting")}
+          />
+        ) : view === "waiting" ? (
+          <Countdown
+            dateKey={dateKey}
             onNewNootAvailable={handleNewNootAvailable}
           />
         ) : (
           <NootReveal
-            state={revealState === "revealed" ? "landing" : revealState}
+            state={view === "noot" ? "landing" : view}
             onReveal={revealNoot}
           />
         )}
       </main>
-
-      <footer className="site-footer">
-        <span>made for one small pause</span>
-        <a
-          href="https://github.com/boatman-27/SaaS_Penguin_API"
-          target="_blank"
-          rel="noreferrer"
-        >
-          facts via Boatman <span aria-hidden="true">↗</span>
-        </a>
-      </footer>
     </div>
   );
 }

@@ -35,16 +35,18 @@ export function Countdown({ dateKey, onNewNootAvailable }: CountdownProps) {
   }, [dateKey, onNewNootAvailable]);
 
   return (
-    <section className="countdown" aria-label="Time until the next Noot">
-      <PenguinMascot state="sleeping" className="countdown__mascot" />
-      <div className="countdown__copy">
+    <section className="waiting" aria-labelledby="waiting-title">
+      <span className="waiting__sleep" aria-hidden="true">
+        zzz
+      </span>
+      <PenguinMascot state="sleeping" />
+      <h1 id="waiting-title">uh oh... that’s it.</h1>
+      <p className="waiting__message">today’s noot is all nooted out.</p>
+      <div className="waiting__countdown" aria-label="Time until the next Noot">
         <p>next noot in</p>
-        <time className="countdown__time" role="timer">
-          {formatCountdown(remaining)}
-        </time>
-        <span>see you tomorrow.</span>
+        <time role="timer">{formatCountdown(remaining)}</time>
       </div>
+      <p className="waiting__tomorrow">see you tomorrow.</p>
     </section>
   );
 }
-

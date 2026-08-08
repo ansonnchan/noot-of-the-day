@@ -37,15 +37,6 @@ export function PenguinPhoto({ image, species }: PenguinPhotoProps) {
           onError={() => setFailed(true)}
         />
       </div>
-      {image.credit && image.creditUrl ? (
-        <figcaption>
-          photo: {" "}
-          <a href={image.creditUrl} target="_blank" rel="noreferrer">
-            {image.credit}
-          </a>
-          {image.license ? ` · ${image.license}` : null}
-        </figcaption>
-      ) : null}
     </figure>
   );
 }

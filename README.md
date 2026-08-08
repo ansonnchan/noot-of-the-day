@@ -55,9 +55,9 @@ Boatman responses are converted at the boundary into the small internal
 trims whitespace, removes simple markup, and normalizes punctuation spacing.
 
 Bundled real penguin photos come from Wikimedia Commons. Per-image author,
-license, and source-page metadata lives in `src/data/images.ts` and is shown
-below each photo. The supplied watercolor mascots remain UI personality rather
-than factual content.
+license, and source-page metadata lives in `src/data/images.ts` and is available
+from the small About panel alongside the current fact source. The supplied
+watercolor mascots remain UI personality rather than factual content.
 
 ## Mascot assets
 

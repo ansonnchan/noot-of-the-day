@@ -1,11 +1,10 @@
 import type { DailyNoot as DailyNootType } from "../lib/penguins/types";
-import { Countdown } from "./Countdown";
 import { PenguinPhoto } from "./PenguinPhoto";
 
 type DailyNootProps = {
   dateKey: string;
   noot: DailyNootType;
-  onNewNootAvailable: () => void;
+  onWantAnother: () => void;
 };
 
 function formatDateKey(dateKey: string): string {
@@ -20,7 +19,7 @@ function formatDateKey(dateKey: string): string {
 export function DailyNoot({
   dateKey,
   noot,
-  onNewNootAvailable,
+  onWantAnother,
 }: DailyNootProps) {
   return (
     <article className="daily-noot">
@@ -31,26 +30,18 @@ export function DailyNoot({
       <PenguinPhoto image={noot.image} species={noot.species} />
 
       <div className="daily-noot__words">
-        {noot.species ? <p className="daily-noot__species">{noot.species}</p> : null}
+        {noot.species ? (
+          <p className="daily-noot__species">{noot.species}</p>
+        ) : null}
         <h1 className="daily-noot__fact">{noot.fact}</h1>
-        {noot.caption ? <p className="daily-noot__caption">{noot.caption}</p> : null}
-        {noot.sourceUrl ? (
-          <a
-            className="source-link"
-            href={noot.sourceUrl}
-            target="_blank"
-            rel="noreferrer"
-          >
-            fact source <span aria-hidden="true">↗</span>
-          </a>
+        {noot.caption ? (
+          <p className="daily-noot__caption">{noot.caption}</p>
         ) : null}
       </div>
 
-      <Countdown
-        dateKey={dateKey}
-        onNewNootAvailable={onNewNootAvailable}
-      />
+      <button className="another-noot-button" type="button" onClick={onWantAnother}>
+        another noot? <span aria-hidden="true">→</span>
+      </button>
     </article>
   );
 }
-
