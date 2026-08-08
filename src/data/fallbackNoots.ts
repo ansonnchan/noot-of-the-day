@@ -5,29 +5,29 @@ import type { DailyNoot } from "../lib/penguins/types";
 
 const FALLBACK_NOOTS = [
   {
-    fact: "Emperor penguins are the largest living species of penguin, reaching around 120 centimetres (4 feet) tall.",
+    fact: "Emperor penguins are the largest living species of penguin, reaching around 120cm (4ft).",
     species: "Emperor penguin",
     sourceUrl:
       "https://www.discover-the-world.com/blog/29-things-you-might-not-have-known-about-penguins/",
   },
   {
-    fact: "Gentoo penguins are the fastest-swimming penguin species and can reach speeds of up to 22 mph (36 km/h).",
+    fact: "Gentoo penguins are the fastest species – they can reach swimming speeds up to 22 mph.",
     species: "Gentoo penguin",
     sourceUrl:
       "https://www.discover-the-world.com/blog/29-things-you-might-not-have-known-about-penguins/",
   },
   {
-    fact: "King penguins can form nesting colonies of up to 10,000 penguins, with each bird keeping a small, precise distance from its neighbours.",
+    fact: "King penguins can form nesting colonies of up to 10,000 penguins.",
     species: "King penguin",
     sourceUrl: "https://www.factretriever.com/penguin-facts",
   },
   {
-    fact: "Macaroni penguins get their name from the flamboyant feathered crests that recalled the fashionable ‘macaroni’ style of the 18th century.",
+    fact: "Macaroni penguins get their name from the long, orange, yellow, and black feathery crests above their eyes.",
     species: "Macaroni penguin",
     sourceUrl: "https://www.factretriever.com/penguin-facts",
   },
   {
-    fact: "Adélie penguins and emperor penguins are the only penguin species that live on the frozen land of Antarctica.",
+    fact: "Only two species, the Adélie (Pygoscelis adeliae) and the Emperor Penguins, live on the frozen land of Antarctica.",
     species: "Adélie penguin",
     sourceUrl: "https://www.factretriever.com/penguin-facts",
   },
@@ -44,4 +44,3 @@ export function getFallbackNoot(dateKey: string): DailyNoot {
     image: getImageForSpecies(fallback.species, dateKey),
   };
 }
-

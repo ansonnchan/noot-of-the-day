@@ -8,7 +8,7 @@ export async function requestBoatmanFact(
     process.env.BOATMAN_API_URL ?? DEFAULT_BOATMAN_URL,
     {
       headers: { Accept: "application/json" },
-      signal,
+      signal: signal ?? AbortSignal.timeout(3000),
     },
   );
 
@@ -18,4 +18,3 @@ export async function requestBoatmanFact(
 
   return response.json() as Promise<unknown>;
 }
-
