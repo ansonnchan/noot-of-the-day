@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState, type MouseEvent } from "react";
 import { DailyNoot } from "./components/DailyNoot";
 import { NootReveal } from "./components/NootReveal";
 import { getLocalDateKey } from "./lib/daily/date";
@@ -27,6 +27,7 @@ const initialNoot = initialStorage
   : null;
 
 export function App() {
+  const requestId = useRef(0);
   const [dateKey, setDateKey] = useState(initialDateKey);
   const [noot, setNoot] = useState<DailyNootType | null>(initialNoot);
   const [revealState, setRevealState] = useState<RevealState>(
@@ -35,20 +36,36 @@ export function App() {
   const [aboutOpen, setAboutOpen] = useState(false);
 
   const revealNoot = useCallback(async () => {
+    if (noot && dateKey === getLocalDateKey()) {
+      setRevealState("revealed");
+      return;
+    }
+
+    const activeRequest = ++requestId.current;
     setRevealState("loading");
 
     try {
       const dailyNoot = await getDailyNoot(dateKey);
       const storage = getLocalStorage();
       if (storage) writeStoredNoot(storage, dateKey, dailyNoot);
+      if (activeRequest !== requestId.current) return;
       setNoot(dailyNoot);
       setRevealState("revealed");
     } catch {
+      if (activeRequest !== requestId.current) return;
       setRevealState("error");
     }
-  }, [dateKey]);
+  }, [dateKey, noot]);
+
+  const handleHome = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    requestId.current += 1;
+    setAboutOpen(false);
+    setRevealState("landing");
+  }, []);
 
   const handleNewNootAvailable = useCallback(() => {
+    requestId.current += 1;
     const nextDateKey = getLocalDateKey();
     const storage = getLocalStorage();
     if (storage) readStoredNoot(storage, nextDateKey);
@@ -60,7 +77,12 @@ export function App() {
   return (
     <div className={`site-shell site-shell--${revealState}`}>
       <header className="site-header">
-        <a className="wordmark" href="/" aria-label="Noot of the Day home">
+        <a
+          className="wordmark"
+          href="/"
+          aria-label="Noot of the Day home"
+          onClick={handleHome}
+        >
           noot<span>.</span>
         </a>
         <button

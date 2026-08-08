@@ -35,11 +35,17 @@ export function NootReveal({ state, onReveal }: NootRevealProps) {
       <h1 id="landing-title">
         one penguin. <span>one little fact.</span> once a day.
       </h1>
-      <PenguinMascot state="default" />
+      <div className="landing__mascot-scene">
+        <div className="landing__ice-wash" aria-hidden="true" />
+        <PenguinMascot state="default" />
+        <span className="landing__noot-note" aria-hidden="true">
+          noot!
+        </span>
+      </div>
       <button className="reveal-button" type="button" onClick={onReveal}>
         meet today’s noot <span aria-hidden="true">→</span>
       </button>
+      <p className="landing__personality">a tiny penguin is waiting for you.</p>
     </section>
   );
 }
-

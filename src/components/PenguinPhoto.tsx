@@ -22,6 +22,9 @@ export function PenguinPhoto({ image, species }: PenguinPhotoProps) {
 
   return (
     <figure className={`noot-photo ${loaded ? "noot-photo--loaded" : ""}`}>
+      <span className="noot-photo__label" aria-hidden="true">
+        today’s noot
+      </span>
       <div className="noot-photo__frame">
         <div className="noot-photo__placeholder" aria-hidden="true" />
         <img
@@ -46,4 +49,3 @@ export function PenguinPhoto({ image, species }: PenguinPhotoProps) {
     </figure>
   );
 }
-

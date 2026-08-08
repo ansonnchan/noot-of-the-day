@@ -1,16 +1,17 @@
 :root {
-  color: #31383a;
-  background: #f7f6f1;
+  color: #425054;
+  background: #f8fbfc;
   font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  --paper: #f7f6f1;
-  --ink: #31383a;
-  --muted: #768082;
-  --ice: #c9dde2;
-  --ice-dark: #78969e;
-  --line: rgba(49, 56, 58, 0.16);
+  --paper: #f8fbfc;
+  --ink: #425054;
+  --muted: #7f8d91;
+  --ice: #dcecef;
+  --ice-soft: #edf6f8;
+  --ice-dark: #789ba4;
+  --line: rgba(66, 80, 84, 0.13);
 }
 
 * {
@@ -21,10 +22,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at 12% 12%, rgba(205, 226, 231, 0.3), transparent 27rem),
-    radial-gradient(circle at 88% 88%, rgba(220, 232, 232, 0.25), transparent 24rem),
-    var(--paper);
+  background: var(--paper);
 }
 
 button,
@@ -49,6 +47,7 @@ a:focus-visible {
 }
 
 .site-shell {
+  position: relative;
   display: flex;
   min-height: 100svh;
   flex-direction: column;
@@ -88,9 +87,8 @@ a:focus-visible {
   color: var(--muted);
   background: transparent;
   cursor: pointer;
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-size: 0.76rem;
+  letter-spacing: 0.035em;
   transition: color 180ms ease, border-color 180ms ease;
 }
 
@@ -108,7 +106,7 @@ a:focus-visible {
   padding: 16px 18px;
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: rgba(247, 246, 241, 0.96);
+  background: rgba(250, 252, 253, 0.97);
   box-shadow: 0 12px 34px rgba(54, 67, 70, 0.08);
   animation: note-in 180ms ease both;
 }
@@ -130,7 +128,7 @@ a:focus-visible {
 
 .site-shell:not(.site-shell--revealed) .site-main {
   place-items: center;
-  padding-block: 22px 70px;
+  padding-block: 14px 62px;
 }
 
 .landing,
@@ -156,9 +154,14 @@ a:focus-visible {
   text-transform: uppercase;
 }
 
+.landing__eyebrow {
+  letter-spacing: 0.12em;
+  text-transform: lowercase;
+}
+
 .landing h1 {
   max-width: 580px;
-  margin: 22px 0 10px;
+  margin: 20px 0 4px;
   font-family: Georgia, "Times New Roman", serif;
   font-size: clamp(2.05rem, 4.2vw, 3.25rem);
   font-weight: 400;
@@ -167,21 +170,58 @@ a:focus-visible {
 }
 
 .landing h1 span {
-  color: #66838a;
+  color: #71929a;
   font-style: italic;
 }
 
 .mascot {
   display: block;
-  width: 230px;
+  width: 250px;
   max-width: 70vw;
   height: auto;
   margin: 6px auto 12px;
   user-select: none;
 }
 
-.landing .mascot {
+.landing__mascot-scene {
+  position: relative;
+  display: grid;
+  width: min(340px, 88vw);
+  min-height: 270px;
+  margin: 2px auto 4px;
+  place-items: center;
+}
+
+.landing__ice-wash {
+  position: absolute;
+  width: 282px;
+  height: 205px;
+  border-radius: 48% 52% 43% 57% / 54% 44% 56% 46%;
+  background: rgba(215, 235, 239, 0.58);
+  transform: rotate(-5deg);
+}
+
+.landing__mascot-scene .mascot {
+  position: relative;
+  z-index: 1;
+  width: 270px;
+  margin: 0;
   animation: mascot-arrive 700ms 120ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.landing__noot-note,
+.noot-photo__label {
+  color: #7698a0;
+  font-family: "Bradley Hand", "Segoe Print", "Comic Sans MS", cursive;
+  font-size: 0.82rem;
+  transform: rotate(-7deg);
+}
+
+.landing__noot-note {
+  position: absolute;
+  z-index: 2;
+  top: 49px;
+  right: 31px;
 }
 
 .reveal-button,
@@ -194,11 +234,14 @@ a:focus-visible {
 }
 
 .reveal-button {
-  padding: 11px 3px 9px;
-  border-bottom: 1px solid var(--ice-dark);
+  padding: 12px 20px 13px;
+  border: 1px solid #b9d3d9;
+  border-radius: 999px;
   font-family: Georgia, "Times New Roman", serif;
   font-size: 1.02rem;
-  transition: color 180ms ease, transform 180ms ease;
+  box-shadow: 0 5px 16px rgba(103, 139, 147, 0.06);
+  transition: background-color 180ms ease, border-color 180ms ease,
+    color 180ms ease, transform 180ms ease;
 }
 
 .reveal-button span,
@@ -209,13 +252,23 @@ a:focus-visible {
 }
 
 .reveal-button:hover {
+  border-color: #a9cbd2;
   color: #58777e;
+  background: var(--ice-soft);
   transform: translateY(-1px);
 }
 
 .reveal-button:hover span,
 .text-button:hover span {
   transform: translateX(3px);
+}
+
+.landing__personality {
+  margin: 14px 0 0;
+  color: #93a0a3;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.74rem;
+  font-style: italic;
 }
 
 .reveal-state {
@@ -254,26 +307,37 @@ a:focus-visible {
 
 .daily-noot {
   width: 100%;
-  padding: 52px 0 80px;
+  padding: 34px 0 70px;
   text-align: center;
   animation: gentle-in 600ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
 .daily-noot__date {
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .noot-photo {
+  position: relative;
   margin: 0;
+}
+
+.noot-photo__label {
+  position: absolute;
+  z-index: 2;
+  top: -13px;
+  right: 20px;
+  padding: 3px 8px;
+  background: rgba(248, 251, 252, 0.94);
+  transform: rotate(-4deg);
 }
 
 .noot-photo__frame {
   position: relative;
   overflow: hidden;
   aspect-ratio: 4 / 3;
-  border-radius: 22px;
-  background: #e5eaE8;
-  box-shadow: 0 18px 48px rgba(51, 64, 67, 0.1);
+  border-radius: 20px;
+  background: #e9f0f1;
+  box-shadow: 0 16px 42px rgba(68, 90, 95, 0.08);
 }
 
 .noot-photo__placeholder {
@@ -334,7 +398,7 @@ a:focus-visible {
 
 .daily-noot__words {
   width: min(590px, 100%);
-  margin: 48px auto 0;
+  margin: 36px auto 0;
 }
 
 .daily-noot__species {
@@ -342,7 +406,7 @@ a:focus-visible {
 }
 
 .daily-noot__fact {
-  margin: 18px 0 0;
+  margin: 15px 0 0;
   font-family: Georgia, "Times New Roman", serif;
   font-size: clamp(1.62rem, 4vw, 2.35rem);
   font-weight: 400;
@@ -352,7 +416,7 @@ a:focus-visible {
 }
 
 .daily-noot__caption {
-  margin: 18px 0 0;
+  margin: 15px 0 0;
   color: #778184;
   font-family: Georgia, "Times New Roman", serif;
   font-size: 0.91rem;
@@ -361,7 +425,7 @@ a:focus-visible {
 
 .source-link {
   display: inline-block;
-  margin-top: 22px;
+  margin-top: 18px;
   color: #858d8f;
   font-size: 0.62rem;
   letter-spacing: 0.11em;
@@ -374,25 +438,39 @@ a:focus-visible {
 }
 
 .countdown {
+  position: relative;
   display: flex;
-  width: min(390px, 100%);
+  width: min(430px, 100%);
   align-items: center;
+  flex-direction: column;
   justify-content: center;
-  gap: 8px;
-  margin: 96px auto 0;
-  padding-top: 36px;
-  border-top: 1px solid var(--line);
+  gap: 0;
+  margin: 66px auto 0;
+  padding: 24px 28px 30px;
+  border: 1px solid rgba(137, 174, 182, 0.22);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.58);
+  box-shadow: 0 14px 38px rgba(78, 104, 110, 0.045);
+}
+
+.countdown::before {
+  position: absolute;
+  top: -34px;
+  width: 104px;
+  height: 1px;
+  background: var(--line);
+  content: "";
 }
 
 .countdown .countdown__mascot {
-  width: 178px;
-  max-width: 48%;
-  margin: 0 -10px 0 0;
+  width: 240px;
+  max-width: 78%;
+  margin: -4px auto -2px;
 }
 
 .countdown__copy {
   min-width: 132px;
-  text-align: left;
+  text-align: center;
 }
 
 .countdown__copy p,
@@ -410,7 +488,7 @@ a:focus-visible {
   margin: 7px 0 8px;
   color: #53666a;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.35rem;
+  font-size: 1.48rem;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.08em;
 }
@@ -431,8 +509,7 @@ a:focus-visible {
   padding-block: 24px 28px;
   color: #939a9b;
   font-size: 0.58rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.035em;
 }
 
 .site-footer a {
@@ -525,8 +602,23 @@ a:focus-visible {
     font-size: clamp(1.88rem, 9.7vw, 2.55rem);
   }
 
-  .landing .mascot {
-    width: 200px;
+  .landing__mascot-scene {
+    width: 300px;
+    min-height: 242px;
+  }
+
+  .landing__ice-wash {
+    width: 250px;
+    height: 180px;
+  }
+
+  .landing__mascot-scene .mascot {
+    width: 236px;
+  }
+
+  .landing__noot-note {
+    top: 46px;
+    right: 25px;
   }
 
   .daily-noot {
@@ -548,7 +640,7 @@ a:focus-visible {
   }
 
   .daily-noot__words {
-    margin-top: 38px;
+    margin-top: 32px;
   }
 
   .daily-noot__fact {
@@ -557,12 +649,12 @@ a:focus-visible {
   }
 
   .countdown {
-    margin-top: 74px;
-    padding-top: 28px;
+    margin-top: 58px;
+    padding: 20px 20px 27px;
   }
 
   .countdown .countdown__mascot {
-    width: 154px;
+    width: 218px;
   }
 
   .site-footer {
