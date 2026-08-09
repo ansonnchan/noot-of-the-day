@@ -1,5 +1,3 @@
-import { captionFor } from "./captions";
-import { getImageForSpecies } from "./images";
 import { stableHash } from "../lib/penguins/normalize";
 import type { DailyNoot } from "../lib/penguins/types";
 
@@ -40,7 +38,5 @@ export function getFallbackNoot(dateKey: string): DailyNoot {
   return {
     id: `fallback-${stableHash(fallback.fact)}`,
     ...fallback,
-    caption: captionFor(`${dateKey}|${fallback.fact}`),
-    image: getImageForSpecies(fallback.species, dateKey),
   };
 }

@@ -20,7 +20,7 @@ describe("daily Noot resolution", () => {
 
     expect(noot.id).toMatch(/^boatman-/);
     expect(noot.species).toBe("Gentoo penguin");
-    expect(noot.image?.url).toBe("/images/noots/gentoo-penguin.jpg");
+    expect(noot).not.toHaveProperty("image");
   });
 
   it("uses a stable local fallback when Boatman is unavailable", async () => {
@@ -31,4 +31,3 @@ describe("daily Noot resolution", () => {
     ).resolves.toEqual(getFallbackNoot("2026-08-08"));
   });
 });
-

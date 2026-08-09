@@ -42,7 +42,7 @@ Malformed or unavailable local storage is treated as an empty cache. If the
 upstream API is unavailable, a small date-selected set of sourced fallback facts
 and bundled photos keeps the experience usable.
 
-## Penguin data and photos
+## Penguin data and daily artwork
 
 Facts are requested first from the
 [Boatman Penguin API](https://github.com/boatman-27/SaaS_Penguin_API). The
@@ -54,10 +54,10 @@ Boatman responses are converted at the boundary into the small internal
 `DailyNoot` type. UI code never depends on Boatman's raw types. Formatting only
 trims whitespace, removes simple markup, and normalizes punctuation spacing.
 
-Bundled real penguin photos come from Wikimedia Commons. Per-image author,
-license, and source-page metadata lives in `src/data/images.ts` and is available
-from the small About panel alongside the current fact source. The supplied
-watercolor mascots remain UI personality rather than factual content.
+The revealed page selects its main visual from the transparent illustrations in
+`public/images/noots/`. Selection follows a stable shuffled daily cycle, so each
+piece appears once before the stockpile repeats. Boatman provides factual text
+only and does not control the artwork.
 
 ## Mascot assets
 
@@ -80,7 +80,7 @@ server/boatmanProxy.ts      Boatman request shared with local development
 src/components/             reveal, daily view, photo, mascot, countdown
 src/lib/daily/              local date, midnight, and storage helpers
 src/lib/penguins/           Boatman adapter, normalizer, domain types
-src/data/                   captions, fallback facts, image registry
+src/data/                   fallback facts and artwork registry
 public/images/              optimized mascots and real photos
 ```
 

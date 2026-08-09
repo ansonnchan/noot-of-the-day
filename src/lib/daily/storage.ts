@@ -1,4 +1,4 @@
-import type { DailyNoot, PenguinImage } from "../penguins/types";
+import type { DailyNoot } from "../penguins/types";
 
 export const STORAGE_KEY = "noot.daily";
 
@@ -27,17 +27,6 @@ function windowOrigin(): string {
   return typeof window === "undefined" ? "https://noot.local" : window.location.origin;
 }
 
-function isImage(value: unknown): value is PenguinImage {
-  return (
-    isRecord(value) &&
-    isSafeWebUrl(value.url) &&
-    typeof value.alt === "string" &&
-    (value.credit === undefined || typeof value.credit === "string") &&
-    (value.creditUrl === undefined || isSafeWebUrl(value.creditUrl)) &&
-    (value.license === undefined || typeof value.license === "string")
-  );
-}
-
 function isDailyNoot(value: unknown): value is DailyNoot {
   return (
     isRecord(value) &&
@@ -46,9 +35,7 @@ function isDailyNoot(value: unknown): value is DailyNoot {
     typeof value.fact === "string" &&
     value.fact.length > 0 &&
     (value.species === undefined || typeof value.species === "string") &&
-    (value.sourceUrl === undefined || isSafeWebUrl(value.sourceUrl)) &&
-    (value.caption === undefined || typeof value.caption === "string") &&
-    (value.image === undefined || isImage(value.image))
+    (value.sourceUrl === undefined || isSafeWebUrl(value.sourceUrl))
   );
 }
 
@@ -93,4 +80,3 @@ export function writeStoredNoot(
     return false;
   }
 }
-

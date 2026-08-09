@@ -1,5 +1,5 @@
 import type { DailyNoot as DailyNootType } from "../lib/penguins/types";
-import { PenguinPhoto } from "./PenguinPhoto";
+import { DailyArtwork } from "./DailyArtwork";
 
 type DailyNootProps = {
   dateKey: string;
@@ -11,7 +11,7 @@ function formatDateKey(dateKey: string): string {
   const [year, month, day] = dateKey.split("-").map(Number);
   return new Intl.DateTimeFormat(undefined, {
     month: "long",
-    day: "2-digit",
+    day: "numeric",
     year: "numeric",
   }).format(new Date(year, month - 1, day, 12));
 }
@@ -27,20 +27,23 @@ export function DailyNoot({
         <time dateTime={dateKey}>{formatDateKey(dateKey)}</time>
       </p>
 
-      <PenguinPhoto image={noot.image} species={noot.species} />
+      <DailyArtwork dateKey={dateKey} />
 
       <div className="daily-noot__words">
         {noot.species ? (
           <p className="daily-noot__species">{noot.species}</p>
         ) : null}
-        <h1 className="daily-noot__fact">{noot.fact}</h1>
-        {noot.caption ? (
-          <p className="daily-noot__caption">{noot.caption}</p>
-        ) : null}
+        <h1 className="daily-noot__fact">
+          <span>Did you know…</span> {noot.fact}
+        </h1>
       </div>
 
-      <button className="another-noot-button" type="button" onClick={onWantAnother}>
-        another noot? <span aria-hidden="true">→</span>
+      <button
+        className="reveal-button daily-noot__cta"
+        type="button"
+        onClick={onWantAnother}
+      >
+        one more noot? <span aria-hidden="true">→</span>
       </button>
     </article>
   );

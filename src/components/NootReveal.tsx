@@ -39,6 +39,7 @@ export function NootReveal({ state, onReveal }: NootRevealProps) {
       <button className="reveal-button" type="button" onClick={onReveal}>
         get today’s noot <span aria-hidden="true">→</span>
       </button>
+      <p className="landing__footer">go on, break the ice—a tiny penguin is waiting.</p>
     </section>
   );
 }

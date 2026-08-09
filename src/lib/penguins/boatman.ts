@@ -1,6 +1,4 @@
-import { captionFor } from "../../data/captions";
 import { getFallbackNoot } from "../../data/fallbackNoots";
-import { getImageForSpecies } from "../../data/images";
 import { normalizeBoatmanResponse } from "./normalize";
 import type { DailyNoot } from "./types";
 
@@ -18,13 +16,8 @@ export async function getDailyNoot(
     const normalized = normalizeBoatmanResponse(await response.json());
     if (!normalized) throw new Error("Unexpected penguin response");
 
-    return {
-      ...normalized,
-      caption: captionFor(`${dateKey}|${normalized.id}`),
-      image: getImageForSpecies(normalized.species, normalized.id),
-    };
+    return normalized;
   } catch {
     return getFallbackNoot(dateKey);
   }
 }
-
