@@ -82,6 +82,16 @@ export function App() {
     setView("landing");
   }, []);
 
+  const handleWantAnother = useCallback(async () => {
+    const activeRequest = ++requestId.current;
+    setAboutOpen(false);
+    setView("loading");
+
+    await waitForRevealTransition();
+    if (activeRequest !== requestId.current) return;
+    setView("waiting");
+  }, []);
+
   const handleNewNootAvailable = useCallback(() => {
     requestId.current += 1;
     const nextDateKey = getLocalDateKey();
@@ -179,7 +189,7 @@ export function App() {
           <DailyNoot
             dateKey={dateKey}
             noot={noot}
-            onWantAnother={() => setView("waiting")}
+            onWantAnother={handleWantAnother}
           />
         ) : view === "waiting" ? (
           <Countdown
