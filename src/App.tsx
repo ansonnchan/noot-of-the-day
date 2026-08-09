@@ -150,7 +150,7 @@ export function App() {
             {aboutOpen ? (
               <aside className="about-note" id="about-note">
                 <p>
-                  Noot of the Day serves one penguin fact each day. Facts provided
+                  Noot of the Day serves one penguin fact each day. Facts are provided
                   by the Boatman Penguin API.
                 </p>
                 <div className="about-note__links">

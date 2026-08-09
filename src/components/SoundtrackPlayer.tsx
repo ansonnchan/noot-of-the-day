@@ -51,7 +51,7 @@ export function SoundtrackPlayer() {
           target="_blank"
           rel="noreferrer"
         >
-          Fish in the Pool
+          fish in the pool · 花屋敷
         </a>
         <a
           className="soundtrack-player__artist"
@@ -59,7 +59,7 @@ export function SoundtrackPlayer() {
           target="_blank"
           rel="noreferrer"
         >
-          花屋敷 · ヘクとパスカル
+          Hekuto Pascal (ヘクとパスカル)
         </a>
 
         <div className="soundtrack-player__controls">
