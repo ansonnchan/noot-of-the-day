@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { DailyNoot } from "./components/DailyNoot";
 import { Countdown } from "./components/Countdown";
 import { NootReveal } from "./components/NootReveal";
+import { SoundtrackPlayer } from "./components/SoundtrackPlayer";
 import { getLocalDateKey } from "./lib/daily/date";
 import {
   readStoredNoot,
@@ -35,6 +36,7 @@ const initialNoot = initialStorage
 
 export function App() {
   const requestId = useRef(0);
+  const aboutRef = useRef<HTMLDivElement>(null);
   const [dateKey, setDateKey] = useState(initialDateKey);
   const [noot, setNoot] = useState<DailyNootType | null>(initialNoot);
   const [view, setView] = useState<View>(
@@ -64,10 +66,10 @@ export function App() {
     }
   }, [dateKey, noot]);
 
-  const handleBack = useCallback(() => {
+  const handleHome = useCallback(() => {
     requestId.current += 1;
     setAboutOpen(false);
-    setView((current) => (current === "waiting" ? "noot" : "landing"));
+    setView("landing");
   }, []);
 
   const handleNewNootAvailable = useCallback(() => {
@@ -89,63 +91,79 @@ export function App() {
     return () => window.clearInterval(interval);
   }, [dateKey, handleNewNootAvailable]);
 
-  const hasBackButton = view === "noot" || view === "waiting";
+  useEffect(() => {
+    if (!aboutOpen) return;
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (
+        aboutRef.current &&
+        !aboutRef.current.contains(event.target as Node)
+      ) {
+        setAboutOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setAboutOpen(false);
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [aboutOpen]);
+
+  const showHomeButton = view !== "landing";
 
   return (
     <div className={`site-shell site-shell--${view}`}>
       <header className="site-header">
-        {hasBackButton ? (
-          <button
-            className="back-button"
-            type="button"
-            aria-label={view === "waiting" ? "Back to today's Noot" : "Home"}
-            onClick={handleBack}
-          >
-            <span aria-hidden="true">←</span>
-          </button>
-        ) : (
-          <span />
-        )}
-        <button
-          className="about-button"
-          type="button"
-          aria-expanded={aboutOpen}
-          aria-controls="about-note"
-          onClick={() => setAboutOpen((open) => !open)}
-        >
-          about
-        </button>
-      </header>
-
-      {aboutOpen ? (
-        <aside className="about-note" id="about-note">
-          <p>
-            Noot of the Day serves one penguin fact each day. Facts provided by
-            the Boatman Penguin API.
-          </p>
-          <div className="about-note__links">
-            <a
-              href="https://github.com/boatman-27/SaaS_Penguin_API"
-              target="_blank"
-              rel="noreferrer"
+        <div className="site-header__start">
+          <SoundtrackPlayer />
+          {showHomeButton ? (
+            <button
+              className="home-button"
+              type="button"
+              aria-label="Return to landing page"
+              onClick={handleHome}
             >
-              Boatman Penguin API <span aria-hidden="true">↗</span>
-            </a>
-            {noot?.sourceUrl ? (
-              <a href={noot.sourceUrl} target="_blank" rel="noreferrer">
-                today’s fact source <span aria-hidden="true">↗</span>
-              </a>
-            ) : null}
-            {noot?.image?.creditUrl ? (
-              <a href={noot.image.creditUrl} target="_blank" rel="noreferrer">
-                photo: {noot.image.credit}
-                {noot.image.license ? ` · ${noot.image.license}` : ""}{" "}
-                <span aria-hidden="true">↗</span>
-              </a>
-            ) : null}
-          </div>
-        </aside>
-      ) : null}
+              <img src="/images/icons/home.svg" alt="" aria-hidden="true" />
+            </button>
+          ) : null}
+        </div>
+
+        <div className="about-control" ref={aboutRef}>
+          <button
+            className="about-button"
+            type="button"
+            aria-expanded={aboutOpen}
+            aria-controls="about-note"
+            onClick={() => setAboutOpen((open) => !open)}
+          >
+            about
+          </button>
+
+          {aboutOpen ? (
+            <aside className="about-note" id="about-note">
+              <p>
+                Noot of the Day serves one penguin fact each day. Facts provided
+                by the Boatman Penguin API.
+              </p>
+              <div className="about-note__links">
+                <a
+                  href="https://github.com/boatman-27/SaaS_Penguin_API"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Boatman Penguin API <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </aside>
+          ) : null}
+        </div>
+      </header>
 
       <main className="site-main">
         {view === "noot" && noot ? (

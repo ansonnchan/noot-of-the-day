@@ -7,12 +7,12 @@ export type PenguinMascotState =
   | "pebble";
 
 const MASCOTS: Record<PenguinMascotState, string> = {
-  default: "/images/mascots/penguin-default.png",
+  default: "/images/mascots/penguin-static.png",
   sleeping: "/images/mascots/penguin-sleeping.png",
   searching: "/images/mascots/penguin-searching.png",
   confused: "/images/mascots/penguin-confused.png",
   camera: "/images/mascots/penguin-searching.png",
-  pebble: "/images/mascots/penguin-default.png",
+  pebble: "/images/mascots/penguin-static.png",
 };
 
 type PenguinMascotProps = {
@@ -34,4 +34,3 @@ export function PenguinMascot({
     />
   );
 }
-
