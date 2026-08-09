@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import {
-  detectSpecies,
   normalizeBoatmanResponse,
   normalizeFactText,
 } from "./normalize";
@@ -17,7 +16,6 @@ describe("Boatman response normalization", () => {
       }),
     ).toMatchObject({
       fact: "Gentoo penguins can swim quickly.",
-      species: "Gentoo penguin",
       sourceUrl: "https://example.org/penguins",
     });
   });
@@ -37,9 +35,4 @@ describe("Boatman response normalization", () => {
       })?.sourceUrl,
     ).toBeUndefined();
   });
-
-  it("omits a species when a fact mentions several", () => {
-    expect(detectSpecies("Emperor and king penguins are large.")).toBeUndefined();
-  });
 });
-

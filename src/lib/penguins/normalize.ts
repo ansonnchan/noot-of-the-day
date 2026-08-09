@@ -1,25 +1,5 @@
 import type { DailyNoot } from "./types";
 
-const SPECIES_NAMES = [
-  "Adélie",
-  "Chinstrap",
-  "Emperor",
-  "Erect-crested",
-  "Fiordland",
-  "Galápagos",
-  "Gentoo",
-  "Humboldt",
-  "King",
-  "Little",
-  "Macaroni",
-  "Magellanic",
-  "Northern rockhopper",
-  "Royal",
-  "Snares",
-  "Southern rockhopper",
-  "Yellow-eyed",
-] as const;
-
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -43,15 +23,6 @@ export function normalizeFactText(value: string): string {
     .replace(/\s+/g, " ")
     .replace(/\s+([,.;:!?])/g, "$1")
     .trim();
-}
-
-export function detectSpecies(fact: string): string | undefined {
-  const normalized = fact.replaceAll("Adelie", "Adélie");
-  const matches = SPECIES_NAMES.filter((species) =>
-    new RegExp(`\\b${species.replace("-", "[- ]")}\\b`, "i").test(normalized),
-  );
-
-  return matches.length === 1 ? `${matches[0]} penguin` : undefined;
 }
 
 export function stableHash(value: string): string {
@@ -80,8 +51,6 @@ export function normalizeBoatmanResponse(value: unknown): DailyNoot | null {
   return {
     id: `boatman-${stableHash(`${fact}|${sourceUrl ?? ""}`)}`,
     fact,
-    species: detectSpecies(fact),
     sourceUrl,
   };
 }
-

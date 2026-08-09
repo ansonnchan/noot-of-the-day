@@ -34,7 +34,6 @@ function isDailyNoot(value: unknown): value is DailyNoot {
     value.id.length > 0 &&
     typeof value.fact === "string" &&
     value.fact.length > 0 &&
-    (value.species === undefined || typeof value.species === "string") &&
     (value.sourceUrl === undefined || isSafeWebUrl(value.sourceUrl))
   );
 }

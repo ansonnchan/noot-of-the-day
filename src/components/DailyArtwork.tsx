@@ -14,8 +14,8 @@ export function DailyArtwork({ dateKey }: DailyArtworkProps) {
       <img
         src={artwork.src}
         alt={artwork.alt}
-        width="600"
-        height="500"
+        width={artwork.width}
+        height={artwork.height}
         fetchPriority="high"
         draggable={false}
       />

@@ -379,7 +379,6 @@ input:focus-visible {
 
 .landing__eyebrow,
 .daily-noot__date,
-.daily-noot__species,
 .waiting__sleep {
   margin: 0;
   color: #75939a;
@@ -503,8 +502,9 @@ input:focus-visible {
 .daily-noot {
   display: grid;
   height: 100%;
-  align-content: center;
+  align-content: start;
   justify-items: center;
+  padding-top: clamp(52px, 8dvh, 90px);
 }
 
 .daily-noot__date {
@@ -513,39 +513,28 @@ input:focus-visible {
 }
 
 .daily-artwork {
-  display: grid;
-  overflow: hidden;
-  width: min(340px, 76vw);
-  height: clamp(215px, 28dvh, 265px);
+  width: min(420px, 84vw);
   margin: 0;
-  place-items: center;
 }
 
 .daily-artwork img {
   display: block;
   width: 100%;
-  height: 100%;
-  object-fit: contain;
-  transform-origin: center;
+  height: auto;
   user-select: none;
 }
 
-.daily-artwork--close img {
-  transform: scale(1.18);
+.daily-artwork--close {
+  width: min(480px, 90vw);
 }
 
 .daily-noot__words {
   width: min(530px, 100%);
-  margin: 20px auto 0;
-}
-
-.daily-noot__species {
-  color: #6f8e96;
-  font-size: 0.88rem;
+  margin: 24px auto 0;
 }
 
 .daily-noot__fact {
-  margin: 12px 0 0;
+  margin: 0;
   font-family: Georgia, "Times New Roman", serif;
   font-size: clamp(1.25rem, 2.25vw, 1.58rem);
   font-weight: 400;
@@ -555,8 +544,12 @@ input:focus-visible {
 }
 
 .daily-noot__fact span {
+  display: block;
+  margin-bottom: 7px;
   color: #61757a;
+  font-size: 0.76em;
   font-style: italic;
+  letter-spacing: -0.01em;
 }
 
 .daily-noot__cta {
@@ -700,10 +693,16 @@ input:focus-visible {
     margin-block: -40px -3px;
   }
 
+  .daily-noot {
+    padding-top: 18px;
+  }
+
   .daily-artwork {
     width: min(300px, 70vw);
-    height: 25dvh;
-    min-height: 175px;
+  }
+
+  .daily-artwork--close {
+    width: min(340px, 76vw);
   }
 
   .daily-noot__words {
@@ -772,8 +771,8 @@ input:focus-visible {
   }
 
   .daily-noot {
-    justify-content: center;
-    padding-block: 12px;
+    align-content: start;
+    padding: 36px 0 24px;
   }
 
   .daily-noot__date {
@@ -781,8 +780,11 @@ input:focus-visible {
   }
 
   .daily-artwork {
-    width: min(320px, 82vw);
-    height: clamp(205px, 27dvh, 250px);
+    width: min(340px, 88vw);
+  }
+
+  .daily-artwork--close {
+    width: min(380px, 92vw);
   }
 
   .daily-noot__words {

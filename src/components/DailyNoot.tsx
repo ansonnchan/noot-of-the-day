@@ -30,9 +30,6 @@ export function DailyNoot({
       <DailyArtwork dateKey={dateKey} />
 
       <div className="daily-noot__words">
-        {noot.species ? (
-          <p className="daily-noot__species">{noot.species}</p>
-        ) : null}
         <h1 className="daily-noot__fact">
           <span>Did you know…</span> {noot.fact}
         </h1>

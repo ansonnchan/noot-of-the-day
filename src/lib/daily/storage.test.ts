@@ -26,7 +26,6 @@ class MemoryStorage implements StorageLike {
 const noot: DailyNoot = {
   id: "gentoo-1",
   fact: "Gentoo penguins can swim very quickly.",
-  species: "Gentoo penguin",
 };
 
 describe("daily noot storage", () => {
@@ -62,4 +61,3 @@ describe("daily noot storage", () => {
     expect(readStoredNoot(storage, "2026-08-08")).toBeNull();
   });
 });
-
