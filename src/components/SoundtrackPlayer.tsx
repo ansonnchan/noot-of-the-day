@@ -1,7 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 const TRACK_SRC =
   "/soundtrack/fish%20in%20the%20pool%E3%83%BB%E8%8A%B1%E5%B1%8B%E6%95%B7.mp3";
+const APPLE_MUSIC_URL =
+  "https://music.apple.com/sg/album/fish-in-the-pool/962575643";
+const SPOTIFY_URL =
+  "https://open.spotify.com/intl-ja/track/4Cx1roYpSYOuaQhLV0FyDO";
 
 function formatTime(seconds: number): string {
   if (!Number.isFinite(seconds)) return "0:00";
@@ -12,35 +16,10 @@ function formatTime(seconds: number): string {
 }
 
 export function SoundtrackPlayer() {
-  const playerRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [expanded, setExpanded] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-
-  useEffect(() => {
-    const handlePointerDown = (event: PointerEvent) => {
-      if (
-        expanded &&
-        playerRef.current &&
-        !playerRef.current.contains(event.target as Node)
-      ) {
-        setExpanded(false);
-      }
-    };
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setExpanded(false);
-    };
-
-    document.addEventListener("pointerdown", handlePointerDown);
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("pointerdown", handlePointerDown);
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [expanded]);
 
   const togglePlayback = async () => {
     const audio = audioRef.current;
@@ -58,67 +37,62 @@ export function SoundtrackPlayer() {
   };
 
   return (
-    <div
-      className={`soundtrack-player${expanded ? " soundtrack-player--expanded" : ""}`}
-      ref={playerRef}
-    >
-      <button
-        className="soundtrack-player__cover-button"
-        type="button"
-        aria-label={expanded ? "Collapse soundtrack player" : "Open soundtrack player"}
-        aria-expanded={expanded}
-        onClick={() => setExpanded((open) => !open)}
-      >
-        <img
-          src="/soundtrack/fish_in_the_pool_album_cover.jpeg"
-          alt=""
-        />
-        {!expanded ? (
-          <span className="soundtrack-player__note" aria-hidden="true">
-            ♪
+    <div className="soundtrack-player">
+      <img
+        className="soundtrack-player__cover"
+        src="/soundtrack/fish_in_the_pool_album_cover.jpeg"
+        alt=""
+      />
+
+      <div className="soundtrack-player__details">
+        <a
+          className="soundtrack-player__title"
+          href={APPLE_MUSIC_URL}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Fish in the Pool
+        </a>
+        <a
+          className="soundtrack-player__artist"
+          href={SPOTIFY_URL}
+          target="_blank"
+          rel="noreferrer"
+        >
+          花屋敷 · ヘクとパスカル
+        </a>
+
+        <div className="soundtrack-player__controls">
+          <button
+            className="soundtrack-player__play"
+            type="button"
+            aria-label={playing ? "Pause Fish in the Pool" : "Play Fish in the Pool"}
+            onClick={togglePlayback}
+          >
+            <span aria-hidden="true">{playing ? "Ⅱ" : "▶"}</span>
+          </button>
+          <span className="soundtrack-player__time">
+            {formatTime(currentTime)}
           </span>
-        ) : null}
-      </button>
-
-      {expanded ? (
-        <div className="soundtrack-player__details">
-          <div className="soundtrack-player__marquee">
-            <span className="soundtrack-player__title">Fish in the Pool</span>
-          </div>
-          <div className="soundtrack-player__artist">Hekuto Pascal</div>
-
-          <div className="soundtrack-player__controls">
-            <button
-              className="soundtrack-player__play"
-              type="button"
-              aria-label={playing ? "Pause Fish in the Pool" : "Play Fish in the Pool"}
-              onClick={togglePlayback}
-            >
-              <span aria-hidden="true">{playing ? "Ⅱ" : "▶"}</span>
-            </button>
-            <span className="soundtrack-player__time">
-              {formatTime(currentTime)}
-            </span>
-            <input
-              className="soundtrack-player__progress"
-              type="range"
-              min="0"
-              max={duration || 0}
-              step="0.1"
-              value={Math.min(currentTime, duration || 0)}
-              aria-label="Soundtrack position"
-              onChange={(event) => {
-                const nextTime = Number(event.target.value);
-                if (audioRef.current) audioRef.current.currentTime = nextTime;
-                setCurrentTime(nextTime);
-              }}
-            />
-            <span className="soundtrack-player__time">
-              {formatTime(duration)}
-            </span>
-          </div>
+          <input
+            className="soundtrack-player__progress"
+            type="range"
+            min="0"
+            max={duration || 0}
+            step="0.1"
+            value={Math.min(currentTime, duration || 0)}
+            aria-label="Soundtrack position"
+            onChange={(event) => {
+              const nextTime = Number(event.target.value);
+              if (audioRef.current) audioRef.current.currentTime = nextTime;
+              setCurrentTime(nextTime);
+            }}
+          />
+          <span className="soundtrack-player__time">
+            {formatTime(duration)}
+          </span>
         </div>
-      ) : null}
+      </div>
 
       <audio
         ref={audioRef}

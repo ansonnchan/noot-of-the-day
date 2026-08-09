@@ -33,28 +33,32 @@ const initialStorage = getLocalStorage();
 const initialNoot = initialStorage
   ? readStoredNoot(initialStorage, initialDateKey)
   : null;
+const REVEAL_TRANSITION_MS = 900;
+
+function waitForRevealTransition(): Promise<void> {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, REVEAL_TRANSITION_MS);
+  });
+}
 
 export function App() {
   const requestId = useRef(0);
   const aboutRef = useRef<HTMLDivElement>(null);
   const [dateKey, setDateKey] = useState(initialDateKey);
   const [noot, setNoot] = useState<DailyNootType | null>(initialNoot);
-  const [view, setView] = useState<View>(
-    initialNoot ? "noot" : "landing",
-  );
+  const [view, setView] = useState<View>("landing");
   const [aboutOpen, setAboutOpen] = useState(false);
 
   const revealNoot = useCallback(async () => {
-    if (noot && dateKey === getLocalDateKey()) {
-      setView("noot");
-      return;
-    }
-
     const activeRequest = ++requestId.current;
     setView("loading");
 
     try {
-      const dailyNoot = await getDailyNoot(dateKey);
+      const currentNoot = dateKey === getLocalDateKey() ? noot : null;
+      const [dailyNoot] = await Promise.all([
+        currentNoot ? Promise.resolve(currentNoot) : getDailyNoot(dateKey),
+        waitForRevealTransition(),
+      ]);
       const storage = getLocalStorage();
       if (storage) writeStoredNoot(storage, dateKey, dailyNoot);
       if (activeRequest !== requestId.current) return;
@@ -115,53 +119,52 @@ export function App() {
     };
   }, [aboutOpen]);
 
-  const showHomeButton = view !== "landing";
-
   return (
     <div className={`site-shell site-shell--${view}`}>
       <header className="site-header">
         <div className="site-header__start">
           <SoundtrackPlayer />
-          {showHomeButton ? (
-            <button
-              className="home-button"
-              type="button"
-              aria-label="Return to landing page"
-              onClick={handleHome}
-            >
-              <img src="/images/icons/home.svg" alt="" aria-hidden="true" />
-            </button>
-          ) : null}
         </div>
 
-        <div className="about-control" ref={aboutRef}>
+        <div className="site-header__end">
           <button
-            className="about-button"
+            className="home-button"
             type="button"
-            aria-expanded={aboutOpen}
-            aria-controls="about-note"
-            onClick={() => setAboutOpen((open) => !open)}
+            aria-label="Return to landing page"
+            onClick={handleHome}
           >
-            about
+            <img src="/images/icons/home.svg" alt="" aria-hidden="true" />
           </button>
 
-          {aboutOpen ? (
-            <aside className="about-note" id="about-note">
-              <p>
-                Noot of the Day serves one penguin fact each day. Facts provided
-                by the Boatman Penguin API.
-              </p>
-              <div className="about-note__links">
-                <a
-                  href="https://github.com/boatman-27/SaaS_Penguin_API"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Boatman Penguin API <span aria-hidden="true">↗</span>
-                </a>
-              </div>
-            </aside>
-          ) : null}
+          <div className="about-control" ref={aboutRef}>
+            <button
+              className="about-button"
+              type="button"
+              aria-expanded={aboutOpen}
+              aria-controls="about-note"
+              onClick={() => setAboutOpen((open) => !open)}
+            >
+              about
+            </button>
+
+            {aboutOpen ? (
+              <aside className="about-note" id="about-note">
+                <p>
+                  Noot of the Day serves one penguin fact each day. Facts provided
+                  by the Boatman Penguin API.
+                </p>
+                <div className="about-note__links">
+                  <a
+                    href="https://github.com/boatman-27/SaaS_Penguin_API"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Boatman Penguin API <span aria-hidden="true">↗</span>
+                  </a>
+                </div>
+              </aside>
+            ) : null}
+          </div>
         </div>
       </header>
 

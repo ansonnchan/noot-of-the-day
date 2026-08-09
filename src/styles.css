@@ -60,13 +60,12 @@ a:focus-visible {
   position: absolute;
   z-index: 5;
   top: 0;
-  left: 50%;
+  left: 24px;
   display: flex;
-  width: min(1080px, calc(100% - 48px));
-  height: 68px;
+  width: calc(100% - 48px);
+  height: 76px;
   align-items: center;
   justify-content: space-between;
-  transform: translateX(-50%);
 }
 
 .home-button,
@@ -82,7 +81,13 @@ a:focus-visible {
   display: flex;
   min-width: 0;
   align-items: center;
-  gap: 9px;
+}
+
+.site-header__end {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-right: 306px;
 }
 
 .home-button {
@@ -126,8 +131,8 @@ a:focus-visible {
 .about-note {
   position: absolute;
   z-index: 6;
-  top: calc(100% + 9px);
-  right: 0;
+  top: -5px;
+  left: calc(100% + 13px);
   width: min(285px, calc(100vw - 48px));
   padding: 15px 17px;
   border: 1px solid var(--line);
@@ -138,34 +143,24 @@ a:focus-visible {
 }
 
 .soundtrack-player {
-  position: relative;
   display: flex;
-  width: 42px;
-  height: 42px;
-  min-width: 42px;
+  width: min(420px, calc(100vw - 145px));
+  height: 58px;
+  min-width: 175px;
   align-items: center;
-  gap: 9px;
-  padding: 3px;
-  overflow: hidden;
-  border: 1px solid rgba(63, 75, 78, 0.11);
-  border-radius: 12px;
-  background: rgba(252, 253, 253, 0.94);
-  box-shadow: 0 6px 18px rgba(59, 78, 82, 0.045);
-  transition: width 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
-    border-color 160ms ease, box-shadow 160ms ease;
+  gap: 11px;
+  padding: 4px 10px 4px 4px;
+  border: 1px solid rgba(120, 155, 164, 0.24);
+  border-radius: 15px;
+  background: rgba(252, 253, 253, 0.92);
+  box-shadow: 0 6px 18px rgba(59, 78, 82, 0.04);
 }
 
-.soundtrack-player:hover,
-.soundtrack-player--expanded {
+.soundtrack-player:hover {
   border-color: rgba(120, 155, 164, 0.29);
-  box-shadow: 0 8px 22px rgba(59, 78, 82, 0.07);
+  box-shadow: 0 8px 22px rgba(59, 78, 82, 0.055);
 }
 
-.soundtrack-player--expanded {
-  width: 300px;
-}
-
-.soundtrack-player__cover-button,
 .soundtrack-player__play {
   flex: 0 0 auto;
   padding: 0;
@@ -174,68 +169,55 @@ a:focus-visible {
   cursor: pointer;
 }
 
-.soundtrack-player__cover-button {
-  position: relative;
+.soundtrack-player__cover {
   display: block;
-  width: 34px;
-  height: 34px;
-  overflow: hidden;
-  border-radius: 9px;
-}
-
-.soundtrack-player__cover-button img {
-  display: block;
-  width: 100%;
-  height: 100%;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
+  border-radius: 10px;
   object-fit: cover;
-}
-
-.soundtrack-player__note {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  color: rgba(255, 255, 255, 0.92);
-  background: rgba(48, 59, 62, 0.19);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 0.88rem;
-  place-items: center;
-  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
 }
 
 .soundtrack-player__details {
   min-width: 0;
   flex: 1;
-  padding-right: 7px;
-  animation: player-details-in 180ms 50ms ease both;
-}
-
-.soundtrack-player__marquee {
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
 }
 
 .soundtrack-player__title {
-  display: inline-block;
-  padding-inline: 5px;
+  display: block;
+  overflow: hidden;
   color: #536267;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 0.73rem;
-  animation: title-left-to-right 4.8s ease-in-out infinite alternate;
+  font-size: 0.8rem;
+  line-height: 1.05;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .soundtrack-player__artist {
-  margin: 1px 0 2px 5px;
+  display: block;
+  overflow: hidden;
+  margin-top: 2px;
   color: #92a0a4;
-  font-size: 0.52rem;
+  font-size: 0.55rem;
   letter-spacing: 0.02em;
+  line-height: 1;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.soundtrack-player__title:hover,
+.soundtrack-player__artist:hover {
+  color: #6f8e96;
 }
 
 .soundtrack-player__controls {
   display: flex;
   align-items: center;
   gap: 5px;
+  margin-top: 3px;
 }
 
 .soundtrack-player__play {
@@ -255,7 +237,7 @@ a:focus-visible {
 
 .soundtrack-player__progress {
   min-width: 40px;
-  height: 2px;
+  height: 3px;
   flex: 1;
   margin: 0;
   accent-color: #789ba4;
@@ -357,7 +339,8 @@ a:focus-visible {
   width: 420px;
   max-width: 94vw;
   margin: -48px auto -4px;
-  animation: mascot-arrive 520ms 80ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation: mascot-arrive 520ms 80ms cubic-bezier(0.2, 0.7, 0.2, 1) both,
+    static-float 5.4s 700ms ease-in-out infinite;
 }
 
 .reveal-button,
@@ -623,6 +606,16 @@ a:focus-visible {
   }
 }
 
+@keyframes static-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
 @keyframes searching {
   0%,
   100% {
@@ -636,31 +629,11 @@ a:focus-visible {
 @keyframes note-in {
   from {
     opacity: 0;
-    transform: translateX(7px);
+    transform: translateX(-7px);
   }
   to {
     opacity: 1;
     transform: translateX(0);
-  }
-}
-
-@keyframes player-details-in {
-  from {
-    opacity: 0;
-    transform: translateX(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes title-left-to-right {
-  from {
-    transform: translateX(-4px);
-  }
-  to {
-    transform: translateX(28px);
   }
 }
 
@@ -714,6 +687,19 @@ a:focus-visible {
   }
 }
 
+@media (max-width: 900px) {
+  .site-header__end {
+    margin-right: 0;
+  }
+
+  .about-note {
+    position: fixed;
+    top: 64px;
+    right: 16px;
+    left: auto;
+  }
+}
+
 @media (max-width: 640px) {
   body {
     overflow: auto;
@@ -726,35 +712,38 @@ a:focus-visible {
   }
 
   .site-header {
+    left: 16px;
     width: calc(100% - 32px);
-    height: 58px;
+    height: 62px;
   }
 
   .about-note {
     width: min(285px, calc(100vw - 32px));
   }
 
-  .soundtrack-player--expanded {
-    width: 42px;
-    overflow: visible;
+  .soundtrack-player {
+    height: 50px;
+    gap: 8px;
   }
 
-  .soundtrack-player__details {
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
-    width: min(280px, calc(100vw - 32px));
-    padding: 10px 11px;
-    border: 1px solid rgba(120, 155, 164, 0.25);
-    border-radius: 11px;
-    background: rgba(252, 253, 253, 0.98);
-    box-shadow: 0 10px 28px rgba(59, 78, 82, 0.08);
+  .soundtrack-player__cover {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+  }
+
+  .soundtrack-player__title {
+    font-size: 0.7rem;
+  }
+
+  .soundtrack-player__artist {
+    font-size: 0.49rem;
   }
 
   .site-main {
     width: calc(100% - 32px);
     min-height: 100dvh;
-    padding: 58px 0 20px;
+    padding: 62px 0 20px;
   }
 
   .landing,
