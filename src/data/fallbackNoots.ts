@@ -133,9 +133,35 @@ export const FALLBACK_NOOTS: readonly Omit<DailyNoot, "id">[] = [
   },
 ];
 
+function dateToDayNumber(dateKey: string): number {
+  const [year, month, day] = dateKey.split("-").map(Number);
+  return Math.floor(Date.UTC(year, month - 1, day) / 86_400_000);
+}
+
+function seededShuffle<T>(items: readonly T[], seed: string): T[] {
+  const shuffled = [...items];
+  let state = Number.parseInt(stableHash(seed), 36) >>> 0;
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    state = (Math.imul(state, 1_664_525) + 1_013_904_223) >>> 0;
+    const swapIndex = state % (index + 1);
+    [shuffled[index], shuffled[swapIndex]] = [
+      shuffled[swapIndex],
+      shuffled[index],
+    ];
+  }
+
+  return shuffled;
+}
+
+const FALLBACK_CYCLE = seededShuffle(FALLBACK_NOOTS, "daily-noot-facts");
+
 export function getFallbackNoot(dateKey: string): DailyNoot {
-  const index = Number.parseInt(stableHash(dateKey), 36) % FALLBACK_NOOTS.length;
-  const fallback = FALLBACK_NOOTS[index];
+  const dayNumber = dateToDayNumber(dateKey);
+  const dayInCycle =
+    ((dayNumber % FALLBACK_CYCLE.length) + FALLBACK_CYCLE.length) %
+    FALLBACK_CYCLE.length;
+  const fallback = FALLBACK_CYCLE[dayInCycle];
 
   return {
     id: `fallback-${stableHash(fallback.fact)}`,
