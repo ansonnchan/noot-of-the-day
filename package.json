@@ -19,7 +19,7 @@
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
-    "typescript": "latest",
+    "typescript": "5.9.3",
     "vite": "latest",
     "vitest": "latest"
   }
