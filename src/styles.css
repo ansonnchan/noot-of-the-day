@@ -166,13 +166,13 @@ input:focus-visible {
 .soundtrack-player {
   display: flex;
   width: min(275px, calc(100vw - 118px));
-  height: 54px;
+  height: 56px;
   min-width: 150px;
   align-items: center;
   gap: 8px;
   padding: 8px;
   overflow: hidden;
-  border: 1px solid rgba(120, 155, 164, 0.24);
+  border: 2px solid rgba(120, 155, 164, 0.24);
   border-radius: 14px;
   background: rgba(252, 253, 253, 0.92);
   box-shadow: 0 6px 18px rgba(59, 78, 82, 0.04);
@@ -186,9 +186,9 @@ input:focus-visible {
 }
 
 .soundtrack-player--collapsed {
-  width: 46px;
-  min-width: 46px;
-  height: 46px;
+  width: 48px;
+  min-width: 48px;
+  height: 48px;
   padding: 4px;
 }
 
@@ -217,8 +217,7 @@ input:focus-visible {
   object-fit: cover;
 }
 
-.soundtrack-player--playing.soundtrack-player--collapsed
-  .soundtrack-player__cover-button {
+.soundtrack-player--playing.soundtrack-player--collapsed {
   animation: soundtrack-bob 2.8s ease-in-out infinite;
 }
 
@@ -231,8 +230,8 @@ input:focus-visible {
   display: block;
   overflow: hidden;
   color: #536267;
-  font-family: var(--hand);
-  font-size: 0.68rem;
+  font-family: inherit;
+  font-size: 0.82rem;
   line-height: 1;
   text-decoration: none;
   text-overflow: ellipsis;
@@ -244,18 +243,13 @@ input:focus-visible {
   overflow: hidden;
   margin-top: 2px;
   color: #92a0a4;
-  font-family: var(--hand);
-  font-size: 0.5rem;
+  font-family: inherit;
+  font-size: 0.62rem;
   letter-spacing: 0.02em;
   line-height: 1;
   text-decoration: none;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.soundtrack-player__title:hover,
-.soundtrack-player__artist:hover {
-  color: #6f8e96;
 }
 
 .soundtrack-player__controls {
@@ -276,8 +270,8 @@ input:focus-visible {
 
 .soundtrack-player__time {
   color: #929da0;
-  font-family: var(--hand);
-  font-size: 0.44rem;
+  font-family: inherit;
+  font-size: 0.52rem;
   font-variant-numeric: tabular-nums;
 }
 
@@ -321,8 +315,8 @@ input:focus-visible {
   align-items: center;
   gap: 3px;
   color: #82979c;
-  font-family: var(--hand);
-  font-size: 0.46rem;
+  font-family: inherit;
+  font-size: 0.54rem;
 }
 
 .soundtrack-player__volume input {

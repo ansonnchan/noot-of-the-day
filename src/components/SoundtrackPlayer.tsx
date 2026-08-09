@@ -1,10 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
 const TRACK_SRC = "/soundtrack/fish%20in%20the%20pool.mp3";
-const APPLE_MUSIC_URL =
-  "https://music.apple.com/sg/album/fish-in-the-pool/962575643";
-const SPOTIFY_URL =
-  "https://open.spotify.com/intl-ja/track/4Cx1roYpSYOuaQhLV0FyDO";
 
 function formatTime(seconds: number): string {
   if (!Number.isFinite(seconds)) return "0:00";
@@ -61,22 +57,12 @@ export function SoundtrackPlayer() {
 
       {expanded ? (
         <div className="soundtrack-player__details">
-          <a
-            className="soundtrack-player__title"
-            href={APPLE_MUSIC_URL}
-            target="_blank"
-            rel="noreferrer"
-          >
+          <span className="soundtrack-player__title">
             fish in the pool · 花屋敷
-          </a>
-          <a
-            className="soundtrack-player__artist"
-            href={SPOTIFY_URL}
-            target="_blank"
-            rel="noreferrer"
-          >
+          </span>
+          <span className="soundtrack-player__artist">
             Hekuto Pascal · ヘクとパスカル
-          </a>
+          </span>
 
           <div className="soundtrack-player__controls">
             <button
