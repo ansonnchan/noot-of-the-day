@@ -37,7 +37,7 @@ export function NootReveal({ state, onReveal }: NootRevealProps) {
       </h1>
       <PenguinMascot state="default" />
       <button className="reveal-button" type="button" onClick={onReveal}>
-        meet today’s noot <span aria-hidden="true">→</span>
+        get today’s noot <span aria-hidden="true">→</span>
       </button>
     </section>
   );

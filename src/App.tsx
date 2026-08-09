@@ -33,7 +33,7 @@ const initialStorage = getLocalStorage();
 const initialNoot = initialStorage
   ? readStoredNoot(initialStorage, initialDateKey)
   : null;
-const REVEAL_TRANSITION_MS = 900;
+const REVEAL_TRANSITION_MS = 3000;
 
 function waitForRevealTransition(): Promise<void> {
   return new Promise((resolve) => {
@@ -51,14 +51,20 @@ export function App() {
 
   const revealNoot = useCallback(async () => {
     const activeRequest = ++requestId.current;
+    setAboutOpen(false);
     setView("loading");
 
     try {
       const currentNoot = dateKey === getLocalDateKey() ? noot : null;
-      const [dailyNoot] = await Promise.all([
+      const [dailyNootResult] = await Promise.allSettled([
         currentNoot ? Promise.resolve(currentNoot) : getDailyNoot(dateKey),
         waitForRevealTransition(),
       ]);
+      if (dailyNootResult.status === "rejected") {
+        throw dailyNootResult.reason;
+      }
+
+      const dailyNoot = dailyNootResult.value;
       const storage = getLocalStorage();
       if (storage) writeStoredNoot(storage, dateKey, dailyNoot);
       if (activeRequest !== requestId.current) return;

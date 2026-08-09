@@ -43,10 +43,22 @@ a {
 }
 
 button:focus-visible,
-a:focus-visible {
+a:focus-visible,
+input:focus-visible {
   outline: 2px solid var(--ice-dark);
   outline-offset: 4px;
   border-radius: 4px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .site-shell {
@@ -66,6 +78,15 @@ a:focus-visible {
   height: 76px;
   align-items: center;
   justify-content: space-between;
+  opacity: 1;
+  transition: opacity 180ms ease, visibility 0s linear;
+}
+
+.site-shell--loading .site-header {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease, visibility 0s linear 180ms;
 }
 
 .home-button,
@@ -87,7 +108,6 @@ a:focus-visible {
   display: flex;
   align-items: center;
   gap: 7px;
-  margin-right: 306px;
 }
 
 .home-button {
@@ -131,8 +151,8 @@ a:focus-visible {
 .about-note {
   position: absolute;
   z-index: 6;
-  top: -5px;
-  left: calc(100% + 13px);
+  top: calc(100% + 9px);
+  right: 0;
   width: min(285px, calc(100vw - 48px));
   padding: 15px 17px;
   border: 1px solid var(--line);
@@ -144,16 +164,19 @@ a:focus-visible {
 
 .soundtrack-player {
   display: flex;
-  width: min(420px, calc(100vw - 145px));
-  height: 58px;
-  min-width: 175px;
+  width: min(310px, calc(100vw - 118px));
+  height: 46px;
+  min-width: 150px;
   align-items: center;
-  gap: 11px;
-  padding: 4px 10px 4px 4px;
+  gap: 8px;
+  padding: 3px 8px 3px 3px;
+  overflow: hidden;
   border: 1px solid rgba(120, 155, 164, 0.24);
-  border-radius: 15px;
+  border-radius: 13px;
   background: rgba(252, 253, 253, 0.92);
   box-shadow: 0 6px 18px rgba(59, 78, 82, 0.04);
+  transition: width 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    border-color 160ms ease, box-shadow 160ms ease;
 }
 
 .soundtrack-player:hover {
@@ -161,6 +184,13 @@ a:focus-visible {
   box-shadow: 0 8px 22px rgba(59, 78, 82, 0.055);
 }
 
+.soundtrack-player--collapsed {
+  width: 44px;
+  min-width: 44px;
+  padding-right: 3px;
+}
+
+.soundtrack-player__cover-button,
 .soundtrack-player__play {
   flex: 0 0 auto;
   padding: 0;
@@ -169,13 +199,24 @@ a:focus-visible {
   cursor: pointer;
 }
 
+.soundtrack-player__cover-button {
+  display: block;
+  width: 38px;
+  height: 38px;
+  overflow: hidden;
+  flex: 0 0 auto;
+  border-radius: 9px;
+}
+
 .soundtrack-player__cover {
   display: block;
-  width: 48px;
-  height: 48px;
-  flex: 0 0 auto;
-  border-radius: 10px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+}
+
+.soundtrack-player--playing .soundtrack-player__cover-button {
+  animation: soundtrack-bob 2.8s ease-in-out infinite;
 }
 
 .soundtrack-player__details {
@@ -187,9 +228,9 @@ a:focus-visible {
   display: block;
   overflow: hidden;
   color: #536267;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 0.8rem;
-  line-height: 1.05;
+  font-family: var(--hand);
+  font-size: 0.68rem;
+  line-height: 1;
   text-decoration: none;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -200,7 +241,8 @@ a:focus-visible {
   overflow: hidden;
   margin-top: 2px;
   color: #92a0a4;
-  font-size: 0.55rem;
+  font-family: var(--hand);
+  font-size: 0.5rem;
   letter-spacing: 0.02em;
   line-height: 1;
   text-decoration: none;
@@ -216,14 +258,14 @@ a:focus-visible {
 .soundtrack-player__controls {
   display: flex;
   align-items: center;
-  gap: 5px;
-  margin-top: 3px;
+  gap: 4px;
+  margin-top: 4px;
 }
 
 .soundtrack-player__play {
   display: grid;
-  width: 20px;
-  height: 20px;
+  width: 17px;
+  height: 17px;
   color: #6f8e96;
   font-size: 0.56rem;
   place-items: center;
@@ -231,17 +273,57 @@ a:focus-visible {
 
 .soundtrack-player__time {
   color: #929da0;
-  font-size: 0.48rem;
+  font-family: var(--hand);
+  font-size: 0.44rem;
   font-variant-numeric: tabular-nums;
 }
 
 .soundtrack-player__progress {
-  min-width: 40px;
-  height: 3px;
+  min-width: 30px;
   flex: 1;
+}
+
+.soundtrack-player__progress,
+.soundtrack-player__volume input {
+  height: 2px;
   margin: 0;
-  accent-color: #789ba4;
+  appearance: none;
+  border-radius: 999px;
+  background: #d8e2e4;
   cursor: pointer;
+}
+
+.soundtrack-player__progress::-webkit-slider-thumb,
+.soundtrack-player__volume input::-webkit-slider-thumb {
+  width: 8px;
+  height: 8px;
+  appearance: none;
+  border: 0;
+  border-radius: 50%;
+  background: #789ba4;
+}
+
+.soundtrack-player__progress::-moz-range-thumb,
+.soundtrack-player__volume input::-moz-range-thumb {
+  width: 8px;
+  height: 8px;
+  border: 0;
+  border-radius: 50%;
+  background: #789ba4;
+}
+
+.soundtrack-player__volume {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 3px;
+  color: #82979c;
+  font-family: var(--hand);
+  font-size: 0.46rem;
+}
+
+.soundtrack-player__volume input {
+  width: 38px;
 }
 
 .about-note p {
@@ -629,11 +711,21 @@ a:focus-visible {
 @keyframes note-in {
   from {
     opacity: 0;
-    transform: translateX(-7px);
+    transform: translateY(-5px);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes soundtrack-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
   }
 }
 
@@ -687,19 +779,6 @@ a:focus-visible {
   }
 }
 
-@media (max-width: 900px) {
-  .site-header__end {
-    margin-right: 0;
-  }
-
-  .about-note {
-    position: fixed;
-    top: 64px;
-    right: 16px;
-    left: auto;
-  }
-}
-
 @media (max-width: 640px) {
   body {
     overflow: auto;
@@ -719,25 +798,6 @@ a:focus-visible {
 
   .about-note {
     width: min(285px, calc(100vw - 32px));
-  }
-
-  .soundtrack-player {
-    height: 50px;
-    gap: 8px;
-  }
-
-  .soundtrack-player__cover {
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-  }
-
-  .soundtrack-player__title {
-    font-size: 0.7rem;
-  }
-
-  .soundtrack-player__artist {
-    font-size: 0.49rem;
   }
 
   .site-main {
@@ -793,6 +853,16 @@ a:focus-visible {
 
   .waiting .mascot {
     width: 275px;
+  }
+}
+
+@media (max-width: 360px) {
+  .soundtrack-player__time--current {
+    display: none;
+  }
+
+  .soundtrack-player__volume input {
+    width: 30px;
   }
 }
 
